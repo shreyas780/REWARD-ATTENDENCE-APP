@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Email Link Sign-In</title>
+</head>
+<body>
+  <h1>Completing Sign-In...</h1>
+  <p id="status"></p>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    if (auth.isSignInWithEmailLink(window.location.href)) {
+      let email = localStorage.getItem('emailForSignIn');
+      if (!email) {
+        email = window.prompt('Please provide your email for confirmation');
+      }
+      auth.signInWithEmailLink(email, window.location.href)
+        .then(() => {
+          document.getElementById('status').innerText = "You are signed in!";
+          localStorage.removeItem('emailForSignIn');
+        })
+        .catch((error) => {
+          document.getElementById('status').innerText = error.message;
+        });
+    }
+  </script>
+</body>
+</html>

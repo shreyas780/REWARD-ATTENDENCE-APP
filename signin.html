@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sign In - Reward Attendance App</title>
+</head>
+<body>
+  <h1>Sign in via Email Link</h1>
+  <input type="email" id="email" placeholder="Enter your email" />
+  <button id="sendLink">Send Login Link</button>
+
+  <p id="status"></p>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+
+  <script>
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    document.getElementById('sendLink').addEventListener('click', async () => {
+      const email = document.getElementById('email').value;
+      const actionCodeSettings = {
+        url: 'https://rewardattendenceapplication.netlify.app/email_link.html', // Where user is redirected after click
+        handleCodeInApp: true
+      };
+
+      try {
+        await auth.sendSignInLinkToEmail(email, actionCodeSettings);
+        localStorage.setItem('emailForSignIn', email); // Store for later
+        document.getElementById('status').innerText = "Login link sent! Check your email.";
+      } catch (error) {
+        document.getElementById('status').innerText = error.message;
+      }
+    });
+  </script>
+</body>
+</html>
