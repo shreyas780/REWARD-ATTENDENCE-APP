@@ -1,41 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Email Link Sign-In</title>
+  <title>Complete Sign In</title>
 </head>
 <body>
-  <h1>Completing Sign-In...</h1>
-  <p id="status"></p>
+  <h2>Completing Sign In...</h2>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+  <script type="module">
+    import { auth } from "./firebase.js";
+    import { isSignInWithEmailLink, signInWithEmailLink } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+    // Check if this URL is a sign-in link
+    if (isSignInWithEmailLink(auth, window.location.href)) {
+      let email = window.localStorage.getItem("emailForSignIn");
 
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    if (auth.isSignInWithEmailLink(window.location.href)) {
-      let email = localStorage.getItem('emailForSignIn');
+      // If no email stored, ask the user
       if (!email) {
-        email = window.prompt('Please provide your email for confirmation');
+        email = window.prompt("Please provide your email for confirmation");
       }
-      auth.signInWithEmailLink(email, window.location.href)
-        .then(() => {
-          document.getElementById('status').innerText = "You are signed in!";
-          localStorage.removeItem('emailForSignIn');
+
+      signInWithEmailLink(auth, email, window.location.href)
+        .then((result) => {
+          window.localStorage.removeItem("emailForSignIn");
+          alert("Sign-in successful! 🎉");
+
+          // Redirect to your dashboard after login
+          window.location.href = "/dashboard";
         })
         .catch((error) => {
-          document.getElementById('status').innerText = error.message;
+          console.error(error);
+          alert("Error: " + error.message);
         });
+    } else {
+      alert("Invalid or expired link.");
     }
   </script>
 </body>
