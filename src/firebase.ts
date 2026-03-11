@@ -1,9 +1,9 @@
 // src/firebase.ts
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore"; // ✅ Firestore added
+import { getFirestore } from "firebase/firestore"; // Firestore
 
-// Your Firebase config
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDbno9pjkGBCZrnhQtZ5eEO0kk0yVdwRGY",
   authDomain: "reward-attendence-app.firebaseapp.com",
@@ -16,6 +16,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Export authentication + firestore
+// Export Firebase services
 export const auth = getAuth(app);
-export const db = getFirestore(app); // ✅ export db
+export const db = getFirestore(app);
