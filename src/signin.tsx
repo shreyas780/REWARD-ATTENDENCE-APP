@@ -2,28 +2,32 @@ import React from "react";
 
 function SignIn() {
   return (
-    <div style={{ padding: "40px", fontFamily: "Arial" }}>
-      <h2>Sign In</h2>
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="bg-white p-8 rounded-xl shadow-lg w-80">
 
-      <form>
-        <div style={{ marginBottom: "10px" }}>
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">
+          Sign In
+        </h2>
+
+        <form className="flex flex-col gap-4">
           <input
             type="email"
-            placeholder="Enter your email"
-            style={{ padding: "8px", width: "250px" }}
+            placeholder="Email"
+            className="border p-2 rounded"
           />
-        </div>
 
-        <div style={{ marginBottom: "10px" }}>
           <input
             type="password"
-            placeholder="Enter your password"
-            style={{ padding: "8px", width: "250px" }}
+            placeholder="Password"
+            className="border p-2 rounded"
           />
-        </div>
 
-        <button type="submit">Login</button>
-      </form>
+          <button className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
+            Login
+          </button>
+        </form>
+
+      </div>
     </div>
   );
 }
