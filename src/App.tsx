@@ -9,13 +9,16 @@ import SignIn from "./signin";
 function App() {
   return (
     <Router>
-      <div>
-        <header style={{ padding: "10px" }}>
+      <div style={{ padding: "20px" }}>
+        
+        {/* Header */}
+        <header style={{ marginBottom: "20px" }}>
           <Link to="/signin">
             <button>Sign In</button>
           </Link>
         </header>
 
+        {/* Routes */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
@@ -34,6 +37,7 @@ function App() {
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+
       </div>
     </Router>
   );
