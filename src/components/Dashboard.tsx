@@ -3,36 +3,33 @@ import { db } from "../firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 
 const Dashboard: React.FC = () => {
-
-const [loading, setLoading] = useState(false);
-const [message, setMessage] = useState("");
+const [loading, setLoading] = useState<boolean>(false);
+const [message, setMessage] = useState<string>("");
 
 const storedUser = localStorage.getItem("logged_in_user");
 const user = storedUser ? JSON.parse(storedUser) : null;
 
 const markAttendance = async () => {
-
-```
-if (!storedUser) {
-  setMessage("❌ User not logged in");
-  return;
+if (!storedUser || !user) {
+setMessage("User not logged in");
+return;
 }
 
+```
 const usn = user.usn;
 
 const now = new Date();
 const today = now.toISOString().split("T")[0];
 
-const docRef = doc(db, "attendance", `${usn}_${today}`);
+const docRef = doc(db, "attendance", usn + "_" + today);
 
 try {
-
   setLoading(true);
 
   const existingDoc = await getDoc(docRef);
 
   if (existingDoc.exists()) {
-    setMessage("⚠️ Attendance already marked today");
+    setMessage("Attendance already marked today");
     setLoading(false);
     return;
   }
@@ -41,40 +38,29 @@ try {
   const minute = now.getMinutes();
 
   const status =
-    hour < 9 || (hour === 9 && minute === 0)
-      ? "early"
-      : "late";
+    hour < 9 || (hour === 9 && minute === 0) ? "early" : "late";
 
   await setDoc(docRef, {
     usn: usn,
     date: today,
     time: now.toLocaleTimeString(),
-    status: status
+    status: status,
   });
 
-  setMessage(`✅ Attendance marked as ${status}`);
-
+  setMessage("Attendance marked as " + status);
 } catch (error) {
-
   console.error("Firestore error:", error);
-  setMessage("❌ Error marking attendance");
-
+  setMessage("Error marking attendance");
 } finally {
-
   setLoading(false);
-
 }
 ```
 
 };
 
-return (
+return ( <div className="min-h-screen bg-gray-100 py-10 px-6"> <div className="max-w-4xl mx-auto">
 
 ```
-<div className="min-h-screen bg-gray-100 py-10 px-6">
-
-  <div className="max-w-4xl mx-auto">
-
     <h1 className="text-3xl font-bold text-gray-900 mb-8">
       Student Dashboard
     </h1>
@@ -84,7 +70,6 @@ return (
         <h2 className="text-xl font-semibold">
           Welcome back, {user.usn}!
         </h2>
-
         <p className="text-sm opacity-90 mt-1">
           Ready to track your attendance and earn rewards?
         </p>
@@ -106,15 +91,12 @@ return (
       </button>
 
       {message && (
-        <p className="mt-4 text-sm text-gray-700">
-          {message}
-        </p>
+        <p className="mt-4 text-sm text-gray-700">{message}</p>
       )}
 
     </div>
 
   </div>
-
 </div>
 ```
 
