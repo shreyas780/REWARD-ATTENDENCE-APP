@@ -1,101 +1,106 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import bcrypt from "bcryptjs";
 
 const Login: React.FC = () => {
-  const navigate = useNavigate();
-  const [usn, setUsn] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
+const navigate = useNavigate();
 
-    const users = JSON.parse(localStorage.getItem("reward_app_users") || "[]");
-    const user = users.find((u: any) => u.usn === usn);
+const [usn, setUsn] = useState("");
+const [password, setPassword] = useState("");
+const [error, setError] = useState("");
 
-    if (!user) {
-      setError("User not found");
-      return;
-    }
+const handleLogin = (e: React.FormEvent) => {
 
-    const isPasswordValid = bcrypt.compareSync(password, user.password);
+```
+e.preventDefault();
 
-    if (!isPasswordValid) {
-      setError("Invalid password");
-      return;
-    }
+const users = JSON.parse(localStorage.getItem("reward_app_users") || "[]");
 
-    // Store logged-in user
-    localStorage.setItem("logged_in_user", JSON.stringify(user));
+const user = users.find((u: any) => u.usn === usn);
 
-    alert("Login successful!");
-    navigate("/dashboard");
-  };
+if (!user) {
+  setError("User not found");
+  return;
+}
 
-  return (
-    <div style={{ padding: "40px", maxWidth: "400px" }}>
-      <h2>Login</h2>
+const isPasswordValid = bcrypt.compareSync(password, user.password);
 
-      <form onSubmit={handleLogin}>
-        <div style={{ marginBottom: "15px" }}>
-          <label>USN:</label>
-          <br />
-          <input
-            type="text"
-            value={usn}
-            onChange={(e) => setUsn(e.target.value)}
-            required
-            style={{
-              padding: "8px",
-              width: "100%",
-              color: "black",
-              borderRadius: "5px",
-              border: "1px solid gray"
-            }}
-          />
-        </div>
+if (!isPasswordValid) {
+  setError("Invalid password");
+  return;
+}
 
-        <div style={{ marginBottom: "15px" }}>
-          <label>Password:</label>
-          <br />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{
-              padding: "8px",
-              width: "100%",
-              color: "black",
-              borderRadius: "5px",
-              border: "1px solid gray"
-            }}
-          />
-        </div>
+localStorage.setItem("logged_in_user", JSON.stringify(user));
 
-        <button
-          type="submit"
-          style={{
-            padding: "10px 15px",
-            backgroundColor: "white",
-            color: "black",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer"
-          }}
-        >
-          Sign In
-        </button>
-      </form>
+navigate("/dashboard");
+```
 
-      {error && (
-        <p style={{ color: "red", marginTop: "10px" }}>
-          {error}
-        </p>
-      )}
-    </div>
-  );
+};
+
+return (
+
+```
+<div className="min-h-screen bg-gray-100 flex items-center justify-center">
+
+  <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md">
+
+    <h2 className="text-2xl font-bold text-center mb-6">
+      Student Login
+    </h2>
+
+    <form onSubmit={handleLogin} className="space-y-4">
+
+      <div>
+        <label className="text-sm font-medium">USN</label>
+        <input
+          type="text"
+          value={usn}
+          onChange={(e) => setUsn(e.target.value)}
+          className="w-full border rounded-lg px-3 py-2 mt-1"
+          required
+        />
+      </div>
+
+      <div>
+        <label className="text-sm font-medium">Password</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full border rounded-lg px-3 py-2 mt-1"
+          required
+        />
+      </div>
+
+      <button
+        type="submit"
+        className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700"
+      >
+        Sign In
+      </button>
+
+    </form>
+
+    {error && (
+      <p className="text-red-500 mt-4 text-center">
+        {error}
+      </p>
+    )}
+
+    <p className="text-sm text-center mt-4">
+      Don't have an account?{" "}
+      <Link to="/register" className="text-indigo-600">
+        Register
+      </Link>
+    </p>
+
+  </div>
+
+</div>
+```
+
+);
 };
 
 export default Login;
