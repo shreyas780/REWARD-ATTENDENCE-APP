@@ -9,16 +9,16 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const markAttendance = async () => {
+  const storedUser = localStorage.getItem("logged_in_user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
 
-    const storedUser = localStorage.getItem("logged_in_user");
+  const markAttendance = async () => {
 
     if (!storedUser) {
       setMessage("❌ User not logged in");
       return;
     }
 
-    const user = JSON.parse(storedUser);
     const usn = user.usn;
 
     const now = new Date();
@@ -30,7 +30,6 @@ const Dashboard: React.FC = () => {
 
       setLoading(true);
 
-      // 🔹 Check if attendance already exists
       const existingDoc = await getDoc(docRef);
 
       if (existingDoc.exists()) {
@@ -42,10 +41,10 @@ const Dashboard: React.FC = () => {
       const hour = now.getHours();
       const minute = now.getMinutes();
 
-      // Early / Late logic
-      const status = hour < 9 || (hour === 9 && minute === 0)
-        ? "early"
-        : "late";
+      const status =
+        hour < 9 || (hour === 9 && minute === 0)
+          ? "early"
+          : "late";
 
       await setDoc(docRef, {
         usn: usn,
@@ -59,43 +58,52 @@ const Dashboard: React.FC = () => {
     } catch (error) {
 
       console.error("Firestore error:", error);
-      setMessage("❌ Error marking attendance. Check Firebase rules.");
+      setMessage("❌ Error marking attendance");
 
     } finally {
       setLoading(false);
     }
   };
 
-  const storedUser = localStorage.getItem("logged_in_user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
-
   return (
 
-    <div className="p-6">
+    <div className="min-h-screen bg-slate-100 p-6">
 
-      <h1 className="text-2xl font-bold mb-4">
-        Dashboard
+      {/* Page Title */}
+      <h1 className="text-2xl font-bold text-gray-900 mb-6">
+        Student Dashboard
       </h1>
 
+      {/* Welcome Card */}
       {user && (
-        <p className="mb-4">
-          Welcome, {user.usn}
-        </p>
+        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl p-6 mb-6 shadow-md">
+          <h2 className="text-xl font-semibold">
+            Welcome back, {user.usn}!
+          </h2>
+          <p className="text-sm opacity-90">
+            Ready to track your attendance and earn rewards?
+          </p>
+        </div>
       )}
 
-      <button
-        onClick={markAttendance}
-        disabled={loading}
-        className="px-5 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:opacity-50"
-      >
-        {loading ? "Marking..." : "Mark Attendance"}
-      </button>
+      {/* Action Section */}
+      <div className="bg-white rounded-xl shadow-md p-6 max-w-md">
 
-      {message && (
-        <p className="mt-4 font-medium">
-          {message}
-        </p>
-      )}
+        <button
+          onClick={markAttendance}
+          disabled={loading}
+          className="w-full px-5 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:opacity-50"
+        >
+          {loading ? "Marking..." : "Mark Attendance"}
+        </button>
+
+        {message && (
+          <p className="mt-4 font-medium text-gray-700">
+            {message}
+          </p>
+        )}
+
+      </div>
 
     </div>
   );
