@@ -10,8 +10,8 @@ env/
 # Distribution / packaging
 .Python
 build/
-develop-eggs/
 dist/
+develop-eggs/
 downloads/
 eggs/
 .eggs/
@@ -24,7 +24,11 @@ var/
 .installed.cfg
 *.egg
 
-# Flask stuff:
+# Node / React
+node_modules/
+dist/
+
+# Flask stuff
 instance/
 .webassets-cache
 
@@ -65,14 +69,14 @@ coverage.xml
 firebase-debug.log
 .firebaserc
 
-# Ignore Netlify build/output
-.netlify/
-
-# Ignore IDE configs
-.idea/
-*.sublime-project
-*.sublime-workspace
-
 # Firebase Admin secrets
 firebase-adminsdk.json
 backend/
+
+# Netlify
+.netlify/
+
+# IDE configs
+.idea/
+*.sublime-project
+*.sublime-workspace
