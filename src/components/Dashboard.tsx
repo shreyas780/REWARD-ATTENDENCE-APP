@@ -60,7 +60,9 @@ try {
   setMessage("❌ Error marking attendance");
 
 } finally {
+
   setLoading(false);
+
 }
 ```
 
@@ -73,12 +75,10 @@ return (
 
   <div className="max-w-4xl mx-auto">
 
-    {/* Page Title */}
     <h1 className="text-3xl font-bold text-gray-900 mb-8">
       Student Dashboard
     </h1>
 
-    {/* Welcome Card */}
     {user && (
       <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl p-6 mb-8 shadow-lg">
         <h2 className="text-xl font-semibold">
@@ -91,7 +91,6 @@ return (
       </div>
     )}
 
-    {/* Attendance Card */}
     <div className="bg-white rounded-xl shadow-lg p-8 max-w-lg">
 
       <h3 className="text-lg font-semibold text-gray-800 mb-4">
