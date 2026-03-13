@@ -1,39 +1,36 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import bcrypt from "bcryptjs";
+import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
 
-const navigate = useNavigate();
-
 const [usn, setUsn] = useState("");
 const [password, setPassword] = useState("");
-const [error, setError] = useState("");
+const navigate = useNavigate();
 
 const handleLogin = (e: React.FormEvent) => {
-
-```
 e.preventDefault();
 
-const users = JSON.parse(localStorage.getItem("reward_app_users") || "[]");
+```
+const storedUser = localStorage.getItem("user");
 
-const user = users.find((u: any) => u.usn === usn);
-
-if (!user) {
-  setError("User not found");
+if (!storedUser) {
+  alert("User not found. Please register first.");
   return;
 }
 
-const isPasswordValid = bcrypt.compareSync(password, user.password);
+const user = JSON.parse(storedUser);
 
-if (!isPasswordValid) {
-  setError("Invalid password");
-  return;
+if (user.usn === usn && user.password === password) {
+
+  localStorage.setItem("logged_in_user", JSON.stringify(user));
+
+  navigate("/dashboard");
+
+} else {
+
+  alert("Invalid USN or Password");
+
 }
-
-localStorage.setItem("logged_in_user", JSON.stringify(user));
-
-navigate("/dashboard");
 ```
 
 };
@@ -41,59 +38,52 @@ navigate("/dashboard");
 return (
 
 ```
-<div className="min-h-screen bg-gray-100 flex items-center justify-center">
+<div className="flex items-center justify-center min-h-[80vh]">
 
-  <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md">
+  <div className="bg-white shadow-xl rounded-xl p-8 w-full max-w-md">
 
-    <h2 className="text-2xl font-bold text-center mb-6">
+    <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
       Student Login
     </h2>
 
     <form onSubmit={handleLogin} className="space-y-4">
 
       <div>
-        <label className="text-sm font-medium">USN</label>
+        <label className="block text-sm font-medium text-gray-600 mb-1">
+          USN
+        </label>
+
         <input
           type="text"
           value={usn}
           onChange={(e) => setUsn(e.target.value)}
-          className="w-full border rounded-lg px-3 py-2 mt-1"
           required
+          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
         />
       </div>
 
       <div>
-        <label className="text-sm font-medium">Password</label>
+        <label className="block text-sm font-medium text-gray-600 mb-1">
+          Password
+        </label>
+
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full border rounded-lg px-3 py-2 mt-1"
           required
+          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
         />
       </div>
 
       <button
         type="submit"
-        className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700"
+        className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition"
       >
         Sign In
       </button>
 
     </form>
-
-    {error && (
-      <p className="text-red-500 mt-4 text-center">
-        {error}
-      </p>
-    )}
-
-    <p className="text-sm text-center mt-4">
-      Don't have an account?{" "}
-      <Link to="/register" className="text-indigo-600">
-        Register
-      </Link>
-    </p>
 
   </div>
 
