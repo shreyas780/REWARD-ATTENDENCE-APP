@@ -20,12 +20,13 @@ const Login: React.FC = () => {
     }
 
     const isPasswordValid = bcrypt.compareSync(password, user.password);
+
     if (!isPasswordValid) {
       setError("Invalid password");
       return;
     }
 
-    // ✅ Store the logged-in user in localStorage
+    // Store logged-in user
     localStorage.setItem("logged_in_user", JSON.stringify(user));
 
     alert("Login successful!");
@@ -33,33 +34,66 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "40px", maxWidth: "400px" }}>
       <h2>Login</h2>
+
       <form onSubmit={handleLogin}>
-        <div style={{ marginBottom: "10px" }}>
+        <div style={{ marginBottom: "15px" }}>
           <label>USN:</label>
+          <br />
           <input
             type="text"
             value={usn}
             onChange={(e) => setUsn(e.target.value)}
             required
+            style={{
+              padding: "8px",
+              width: "100%",
+              color: "black",
+              borderRadius: "5px",
+              border: "1px solid gray"
+            }}
           />
         </div>
 
-        <div style={{ marginBottom: "10px" }}>
+        <div style={{ marginBottom: "15px" }}>
           <label>Password:</label>
+          <br />
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            style={{
+              padding: "8px",
+              width: "100%",
+              color: "black",
+              borderRadius: "5px",
+              border: "1px solid gray"
+            }}
           />
         </div>
 
-        <button type="submit">Sign In</button>
+        <button
+          type="submit"
+          style={{
+            padding: "10px 15px",
+            backgroundColor: "white",
+            color: "black",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer"
+          }}
+        >
+          Sign In
+        </button>
       </form>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && (
+        <p style={{ color: "red", marginTop: "10px" }}>
+          {error}
+        </p>
+      )}
     </div>
   );
 };
